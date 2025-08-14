@@ -1,15 +1,3 @@
-function make_environment(env) {
-  return new Proxy(env, {
-    get(target, prop, receiver) {
-      if (env[prop] !== undefined) {
-        return env[prop].bind(env);
-      }
-      return (...args) => {
-        throw new Error(`NOT IMPLEMENTED: ${prop} ${args}`);
-      };
-    },
-  });
-}
 let wasm;
 let canvas;
 let ctx;
@@ -20,7 +8,7 @@ const str_len = wasmlib.str_len;
 const get_str = wasmlib.get_str;
 
 WebAssembly.instantiateStreaming(fetch("game.wasm"), {
-  env: make_environment({
+  env: wasmlib.make_environment({
     printf: wasmlib.printf,
   }),
 }).then((w) => {
