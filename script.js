@@ -20,10 +20,11 @@ WebAssembly.instantiateStreaming(fetch("game.wasm"), {
   const buffer = wasm.instance.exports.memory.buffer;
   let buff = new Uint8ClampedArray(
     buffer,
-    setBackgroundColor(0x6b5b95ff),
+    setBackgroundColor(0x6b5b95ff), //rgba
     1200 * 700 * 4
   );
-  drawRectangle(10, 0, 300, 150, 0x0000ffff);
+  console.log(setBackgroundColor(0x6b5b95ff));
+  drawRectangle(20, 10, 350, 10, 0xffff00ff);
   const image = new ImageData(buff, 1200, 700);
   // change_buffer(buffer_ptr());
   let previous;
@@ -41,6 +42,6 @@ WebAssembly.instantiateStreaming(fetch("game.wasm"), {
 });
 
 const drawFPS = (dt) => {
-  ctx.font = "30px Arial";
+  ctx.font = "30px sans-serif";
   ctx.fillText("" + 1 / dt, 900, 40);
 };

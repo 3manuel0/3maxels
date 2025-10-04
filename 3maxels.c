@@ -7,6 +7,7 @@ unsigned char * setBackgroundColor(int color){
     char g = (color >> 16) & 0xFF;
     char b = (color >> 8) & 0xFF; 
     char a = color & 0xFF;
+
     for(u32 i = 0; i < IMAGE_SIZE; i++){
         if(t == 3){
             buffer[i] = a;
@@ -29,39 +30,24 @@ unsigned char * setBackgroundColor(int color){
 }
 
 void drawRectangle(int x, int y, int width, int height, int color){
-    int t;
     char r = (color >> 24) & 0xFF;
     char g = (color >> 16) & 0xFF;
     char b = (color >> 8) & 0xFF; 
     char a = color & 0xFF;
-    for(u32 i = 0; i < IMAGE_SIZE; i++){
-        if( i > 1200 * height * 4 + 1){
-                return;
-        }
-        for(int j = 0; j < height; j++){
-            if( i < ((width + (1200 * j) ) * 4) && i >= 1200 * j * 4){
-                if(t == 3){
-                    buffer[i] = a;
-                }
-                if(t == 0){
-                    buffer[i] = r;
-                }
-                if(t == 1){
-                    buffer[i] = g;
-                }
-                if(t == 2){
-                    buffer[i] = b;
-                }
-                t++;
-                if(t == 4){
-                    t = 0;
-                }
-            }
-
+    width *= 4;
+    height *= 4;
+    // int offset = (x * 4) + (y * 4 * IMAGE_WIDTH) ;
+    for(int j = 1; j < height + 1; j++){
+        int offset = (x * 4 * width) + (y * 4) ;
+        printf("offset = %d image_size = %d", offset, IMAGE_SIZE);
+        for(int i = offset; i < offset + width - 4 ; i+=4){
+            buffer[i] = r;
+            buffer[i + 1] = g;
+            buffer[i + 2] = b;
+            buffer[i + 3] = a;
         }
     }
 };
-unsigned char randomNumber();
 
 static unsigned int seed = 12345;
 
