@@ -6,7 +6,7 @@ let dt;
 let blured = false;
 const str_len = wasmlib.str_len;
 const get_str = wasmlib.get_str;
-
+let ddrawRectangle;
 WebAssembly.instantiateStreaming(fetch("game.wasm"), {
   env: wasmlib.make_environment({
     printf: wasmlib.printf,
@@ -15,16 +15,21 @@ WebAssembly.instantiateStreaming(fetch("game.wasm"), {
   wasm = w;
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
-  const { setBackgroundColor, change_buffer, drawRectangle } =
+  const { setBackgroundColor, change_buffer, drawRectangle, get_Buffer } =
     w.instance.exports;
   const buffer = wasm.instance.exports.memory.buffer;
+  let bg_color = 0x6b5b95ff;
+  //0xff955b6b
+
   let buff = new Uint8ClampedArray(
     buffer,
     setBackgroundColor(0x6b5b95ff), //rgba
     1200 * 700 * 4
   );
-  console.log(setBackgroundColor(0x6b5b95ff));
-  drawRectangle(20, 10, 350, 10, 0xffff00ff);
+  // console.log(setBackgroundColor(0x6b5b95ff));
+  console.log(new Uint8ClampedArray(buffer, get_Buffer(), 1200 * 700 * 4));
+  ddrawRectangle = drawRectangle;
+  drawRectangle(300, 400, 400, 200, 0xffff00ff);
   const image = new ImageData(buff, 1200, 700);
   // change_buffer(buffer_ptr());
   let previous;
