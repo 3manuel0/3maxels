@@ -1,7 +1,7 @@
 
 #include "3maxels.h"
 
-unsigned char * get_Buffer(){
+unsigned char * getBuffer(){
     return (unsigned char *)buffer;
 }
 
@@ -14,6 +14,7 @@ unsigned char * setBackgroundColor(i32 color){
             buffer[i][j] = new_color;
         }
     }
+    jprintf("%d", buffer);
     return (u8 *)buffer;
 }
 
@@ -33,7 +34,7 @@ void drawRectangle(i32 x, i32 y, i32 width, i32 height, i32 color){
 };
 
 
-// this is just for testing (yes this function is ai generated, I had no idea how to create a randome function)
+// this is just for testing (yes this function is AI generated, I had no idea how to create a randome function)
 static unsigned int seed = 12345;
 unsigned char randomNumber(){
     seed = seed * 1103515245 + 12345;

@@ -12,6 +12,6 @@ typedef unsigned int u32;
 typedef char i8;
 typedef short i16;
 typedef int i32;
-int printf(char *a, ...);
+int jprintf(char *a, ...);
 
 #endif
