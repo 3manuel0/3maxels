@@ -4,22 +4,6 @@
 unsigned char * getBuffer(){
     return (unsigned char *)buffer;
 }
-typedef struct {
-    float x, y;
-}vec2;
-
-typedef struct {
-    float x, y, z, w;
-}vec4;
-
-float dot(vec2 a, vec2 b){
-    return ((a.x * b.x) + (a.y * b.y));
-}
-
-float abs(float n){
-    if (n < 0) return n * -1;
-    return n;
-}
 
 int get_image_size(){
     return IMAGE_SIZE;
@@ -68,10 +52,10 @@ void drawRectangle(i32 x, i32 y, i32 width, i32 height, i32 color){
 // for(float i;i++<8.;o+=(sin(v.xyyx)+1.)*abs(v.x-v.y)*.2)v+=cos(v.yx*i+vec2(0,i)+t)/i+.7;  #  
 // o=tanh(exp(p.y*vec4(1,-1,-2,0))*exp(-4.*l.x)/o);                                         #
 // ##########################################################################################
-
+// slow huge computation even when compiting with -O3
 void draw_shader(int frame){
-    int width = 16*13;
-    int height =9*13;
+    int width = 12*25;
+    int height =9*25;
     vec2 r = {(float)width, (float)height};
     float t = ((float)frame/240)*2*M_PI;
     for (u32 y = 0; y < IMAGE_HEIGHT; y++){
@@ -112,7 +96,6 @@ void draw_shader(int frame){
                 o.x = tanh(exp(p.y - 4*l) / o.x);
                 o.y = tanh(exp(-p.y - 4*l) / o.y);
                 o.z = tanh(exp(-2*p.y - 4*l) / o.z);
-                o.w = tanh(exp(-4*l) / o.w);
                 // jprintf("%d %d", y, x);
                 // buffer[x][y] = *(int*)(&o);
                 *(char *)&buffer[y][x] = o.x * 255;
@@ -125,4 +108,76 @@ void draw_shader(int frame){
     }
 }
 
+
+float dot(vec2 a, vec2 b){
+    return ((a.x * b.x) + (a.y * b.y));
+}
+
+float abs(float x){
+    if (x < 0) return x * -1;
+    return x;
+}
+float fact(int x) {
+    float f = 1;
+    for (int i = 2; i <= x; i++) f *= i;
+    return f;
+}
+
+float pow(float n, float x){
+    float res = 1.0f;
+    for(int i = 0; i < x; i++)res *= n;
+    return res;
+}
+
+float sin(float x) {
+    float sum = 0;
+    float term;
+    int n;
+
+    // range check
+    while (x > M_PI) x -= M_PI2;
+    while (x < -M_PI) x += M_PI2;
+
+    for (n = 0; n < 10; n++) {
+        term = (n % 2 == 0 ? 1 : -1) * 
+               (pow(x, 2*n + 1) / fact(2*n + 1));
+        sum += term;
+    }
+
+    return sum;
+}
+
+float cos(float x) {
+    // range chek 
+    while (x > M_PI) x -= M_PI2;
+    while (x < -M_PI) x += M_PI2;
+
+    float term = 1;
+    float sum = term;
+
+    for (int n = 1; n < 10; n++) { 
+        term = -term * x * x / ((2*n-1) * (2*n));
+        sum += term;
+    }
+
+    return sum;
+}
+
+float exp(float x){
+    // 1e-7
+    float sum = 1.0f;
+    float term = 1.0f;
+    int n = 1;
+    for (int n = 1; n < 100; n++) {
+        term *= x / n;
+        sum += term;
+        if (term < 1e-7 && term > -1e-7) break;
+    }
+    return sum;
+}
+
+// tanh(x)=ex+e−xex−e−x​
+float tanh(float x){
+    return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
+}
 
