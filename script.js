@@ -88,5 +88,6 @@ WebAssembly.instantiateStreaming(fetch("game.wasm"), {
 
 const drawFPS = (dt, width) => {
   ctx.font = "30px sans-serif";
+  ctx.fillStyle = "#32875eff";
   ctx.fillText("FPS : " + (1 / dt).toFixed(2), width - 200, 40);
 };

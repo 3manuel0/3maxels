@@ -54,10 +54,10 @@ void drawRectangle(i32 x, i32 y, i32 width, i32 height, i32 color){
 // ##########################################################################################
 // slow huge computation even when compiting with -O3
 void draw_shader(int frame){
-    int width = 12*25;
-    int height =9*25;
+    int width = 12*35;
+    int height =9*35;
     vec2 r = {(float)width, (float)height};
-    float t = ((float)frame/240)*2*M_PI;
+    float t = ((float)frame/240)*M_PI2;
     for (u32 y = 0; y < IMAGE_HEIGHT; y++){
         for (u32 x = 0; x < IMAGE_WIDTH; x++) {
             if( x < width && y < height){
@@ -114,9 +114,10 @@ float dot(vec2 a, vec2 b){
 }
 
 float abs(float x){
-    if (x < 0) return x * -1;
+    if (x < 0) return -x;
     return x;
 }
+
 float fact(int x) {
     float f = 1;
     for (int i = 2; i <= x; i++) f *= i;
@@ -149,35 +150,47 @@ float sin(float x) {
 
 float cos(float x) {
     // range chek 
-    while (x > M_PI) x -= M_PI2;
-    while (x < -M_PI) x += M_PI2;
+    // while (x > M_PI) x -= M_PI2;
+    // while (x < -M_PI) x += M_PI2;
 
-    float term = 1;
-    float sum = term;
+    // float term = 1;
+    // float sum = term;
 
-    for (int n = 1; n < 10; n++) { 
-        term = -term * x * x / ((2*n-1) * (2*n));
-        sum += term;
-    }
+    // for (int n = 1; n < 10; n++) { 
+    //     term = -term * x * x / ((2*n-1) * (2*n));
+    //     sum += term;
+    // }
 
-    return sum;
+    // return sum;
+    return sin(x + M_PI2);
 }
 
+// pre calculate values for speed
+static const float inv[] = {1.0f,
+    1.0f/1.0f, 1.0f/2.0f, 1.0f/3.0f, 1.0f/4.0f, 1.0f/5.0f,
+    1.0f/6.0f, 1.0f/7.0f, 1.0f/8.0f, 1.0f/9.0f, 1.0f/10.0f,
+    1.0f/11.0f, 1.0f/12.0f, 1.0f/13.0f, 1.0f/14.0f, 1.0f/15.0f,
+    1.0f/16.0f, 1.0f/17.0f, 1.0f/18.0f, 1.0f/19.0f, 1.0f/20.0f,
+    1.0f/21.0f, 1.0f/22.0f, 1.0f/23.0f, 1.0f/24.0f, 1.0f/25.0f,
+    1.0f/26.0f, 1.0f/27.0f, 1.0f/28.0f, 1.0f/29.0f, 1.0f/30.0f
+};
+
 float exp(float x){
-    // 1e-7
     float sum = 1.0f;
     float term = 1.0f;
-    int n = 1;
-    for (int n = 1; n < 100; n++) {
-        term *= x / n;
+    for (int n = 1; n < 30; n++) {
+        term *= x * inv[n];
         sum += term;
         if (term < 1e-7 && term > -1e-7) break;
     }
     return sum;
 }
 
+
+
 // tanh(x)=ex+e−xex−e−x​
 float tanh(float x){
-    return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
+    // return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
+    return 1.5 * x / (1 + abs(1.5 * x));
 }
 
