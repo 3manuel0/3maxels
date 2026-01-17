@@ -59,9 +59,9 @@ WebAssembly.instantiateStreaming(fetch("game.wasm"), {
   const image = new ImageData(buff, width, height);
   // change_buffer(buffer_ptr());
   let previous;
-  let x = 0;
-  let velocity = 6;
   let i = 0;
+  canvas.style.transformOrigin = "0 0";
+  canvas.style.transform = "scale(2.2) translate(-50%, -50%)";
   // continue the loop by recalling this function (next())
   const next = (timestamp) => {
     dt = (timestamp - previous) / 1000.0;
@@ -87,7 +87,7 @@ WebAssembly.instantiateStreaming(fetch("game.wasm"), {
 });
 
 const drawFPS = (dt, width) => {
-  ctx.font = "30px sans-serif";
+  ctx.font = "26px sans-serif";
   ctx.fillStyle = "#32875eff";
-  ctx.fillText("FPS : " + (1 / dt).toFixed(2), width - 200, 40);
+  ctx.fillText((1 / dt).toFixed(2), width - 80, 40);
 };

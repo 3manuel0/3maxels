@@ -54,8 +54,8 @@ void drawRectangle(i32 x, i32 y, i32 width, i32 height, i32 color){
 // ##########################################################################################
 // slow huge computation even when compiting with -O3
 void draw_shader(int frame){
-    int width = 12*35;
-    int height =9*35;
+    int width = IMAGE_WIDTH;
+    int height = IMAGE_HEIGHT;
     vec2 r = {(float)width, (float)height};
     float t = ((float)frame/240)*M_PI2;
     for (u32 y = 0; y < IMAGE_HEIGHT; y++){

@@ -1,9 +1,9 @@
 
 #ifndef H_3MAXELS
 #define H_3MAXELS
-#define IMAGE_HEIGHT 600
-#define IMAGE_WIDTH 800
-#define IMAGE_SIZE 800 * 600 * 4 // RGBA
+#define IMAGE_HEIGHT 9*30
+#define IMAGE_WIDTH 12*30
+#define IMAGE_SIZE (IMAGE_HEIGHT * IMAGE_WIDTH * 4) // RGBA
 #define M_PI 3.14159265358979323846f
 #define M_PI2 6.28318530717958647692f
 static unsigned int buffer[IMAGE_HEIGHT][IMAGE_WIDTH] = {0};
